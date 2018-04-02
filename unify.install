@@ -1,0 +1,29 @@
+#! /bin/bash
+
+pkg=UniFi.unix.zip
+pkgname=unifi
+pkgver=5.6.29
+pkgrel=1
+pkgdesc='Centralized management system for Ubiquiti UniFi AP'
+pkgdir=/opt/UniFi
+source=http://dl.ubnt.com/unifi/$pkgver/$pkg
+
+curl -o $pkg $source
+
+# unzip
+unzip -ao $pkg
+
+if [ $? -eq 0 ]; then
+  # lib
+  echo "⚠  Installing lib files ⚠ "
+  install -dm755 "$pkgdir"
+  echo "🛠  Copying files 🛠 "
+  cp -rv UniFi/{bin,dl,lib,webapps} "$pkgdir/"
+  echo "🛠  Fixing permissions 👮 "
+  chown -R ubnt:ubnt "$pkgdir/"
+  echo "👏  Installation finished 🎉 "
+
+  rm -Rf UniFi/ $pkg
+fi
+
+# vim:set ts=2 sw=2 ft=sh et:
